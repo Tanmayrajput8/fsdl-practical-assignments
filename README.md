@@ -5,9 +5,8 @@
 | Details | Information |
 |---|---|
 | **Name** | Tanmay Rajput |
-| **Roll No.** | YOUR_ROLL_NUMBER |
-| **Class** | YOUR_CLASS |
-| **Division** | YOUR_DIVISION |
+| **Roll No.** | 123B1B239 |
+| **Division** | D1 |
 | **Subject** | Full Stack Development Lab (FSDL) |
 
 ---
