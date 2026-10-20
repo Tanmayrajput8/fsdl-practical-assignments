@@ -1,0 +1,94 @@
+<%- include('./partials/header') %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-person-circle me-2"></i>My Profile</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/user/profile?_method=PUT" method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control <%= errors.find(e => e.path === 'name') ? 'is-invalid' : '' %>" 
+                                       id="name" name="name" value="<%= userData.name %>" required>
+                                <% const nameError = errors.find(e => e.path === 'name'); %>
+                                <% if (nameError) { %>
+                                <div class="invalid-feedback"><%= nameError.msg %></div>
+                                <% } %>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control bg-light" id="email" value="<%= userData.email %>" disabled>
+                                <div class="form-text">Email cannot be changed</div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control <%= errors.find(e => e.path === 'phone') ? 'is-invalid' : '' %>" 
+                                       id="phone" name="phone" value="<%= userData.phone %>" maxlength="10" required>
+                                <% const phoneError = errors.find(e => e.path === 'phone'); %>
+                                <% if (phoneError) { %>
+                                <div class="invalid-feedback"><%= phoneError.msg %></div>
+                                <% } %>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="role" class="form-label">Account Type</label>
+                                <input type="text" class="form-control bg-light" id="role" 
+                                       value="<%= userData.role.charAt(0).toUpperCase() + userData.role.slice(1) %>" disabled>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        <h5 class="mb-3 text-primary"><i class="bi bi-geo-alt me-2"></i>Address</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" 
+                                       value="<%= userData.address?.city || '' %>">
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="state" class="form-label">State</label>
+                                <input type="text" class="form-control" id="state" name="state" 
+                                       value="<%= userData.address?.state || '' %>">
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="pincode" class="form-label">Pincode</label>
+                                <input type="text" class="form-control" id="pincode" name="pincode" 
+                                       value="<%= userData.address?.pincode || '' %>" maxlength="6">
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Update Profile
+                            </button>
+                            <a href="/user/dashboard" class="btn btn-outline-secondary btn-lg">
+                                Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-muted small">
+                        <p class="mb-1"><i class="bi bi-calendar me-2"></i>Member since: <%= new Date(userData.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('./partials/footer') %>

@@ -1,0 +1,217 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/products">Listings</a></li>
+            <li class="breadcrumb-item"><a href="/products?category=<%= product.category %>"><%= product.category %></a></li>
+            <li class="breadcrumb-item active"><%= product.title %></li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <!-- Image Gallery -->
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="position-relative">
+                        <img id="mainImage" src="<%= product.images.length > 0 ? product.images[0] : '/images/no-image.png' %>" 
+                             class="img-fluid rounded w-100" alt="<%= product.title %>" style="max-height: 450px; object-fit: cover;">
+                        <% if (product.status === 'sold') { %>
+                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50 rounded">
+                            <span class="badge bg-danger fs-2 px-4 py-2">SOLD</span>
+                        </div>
+                        <% } %>
+                    </div>
+                    <% if (product.images.length > 1) { %>
+                    <div class="row g-2 mt-3">
+                        <% product.images.forEach((img, index) => { %>
+                        <div class="col-3">
+                            <img src="<%= img %>" class="img-thumbnail thumb-img <%= index === 0 ? 'active' : '' %>" 
+                                 onclick="changeImage(this, '<%= img %>')" alt="Thumbnail <%= index + 1 %>" style="height: 80px; object-fit: cover; cursor: pointer;">
+                        </div>
+                        <% }); %>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Details -->
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge 
+                            <%= product.condition === 'Like New' ? 'bg-success' : 
+                               product.condition === 'Good' ? 'bg-primary' : 
+                               product.condition === 'Fair' ? 'bg-warning' : 'bg-danger' %> fs-6">
+                            <%= product.condition %>
+                        </span>
+                        <span class="text-muted small"><i class="bi bi-eye me-1"></i><%= product.views %> views</span>
+                    </div>
+                    
+                    <h3 class="fw-bold mb-3"><%= product.title %></h3>
+                    <h2 class="text-primary fw-bold mb-4">₹<%= product.price.toLocaleString('en-IN') %></h2>
+                    
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td class="text-muted"><i class="bi bi-tag me-2"></i>Category</td>
+                                <td class="fw-medium"><%= product.category %></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="bi bi-building me-2"></i>Brand</td>
+                                <td class="fw-medium"><%= product.brand %></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="bi bi-calendar me-2"></i>Year</td>
+                                <td class="fw-medium"><%= product.year %></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="bi bi-speedometer2 me-2"></i>KM Driven</td>
+                                <td class="fw-medium"><%= product.kmDriven.toLocaleString('en-IN') %> km</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="bi bi-fuel-pump me-2"></i>Fuel Type</td>
+                                <td class="fw-medium"><%= product.fuelType %></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="bi bi-geo-alt me-2"></i>Location</td>
+                                <td class="fw-medium"><%= product.location.city || 'N/A' %><%= product.location.state ? ', ' + product.location.state : '' %></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="bi bi-clock me-2"></i>Posted</td>
+                                <td class="fw-medium"><%= new Date(product.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <% if (typeof isOwner !== 'undefined' && isOwner) { %>
+                    <div class="d-flex gap-2 mt-4">
+                        <a href="/products/<%= product._id %>/edit" class="btn btn-outline-primary flex-fill">
+                            <i class="bi bi-pencil me-2"></i>Edit
+                        </a>
+                        <% if (product.status !== 'sold') { %>
+                        <form action="/products/<%= product._id %>/mark-sold" method="POST" class="flex-fill">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-check-circle me-2"></i>Mark as Sold
+                            </button>
+                        </form>
+                        <% } %>
+                        <form action="/products/<%= product._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.')">
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            
+            <!-- Seller Info -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Seller Information</h5>
+                </div>
+                <div class="card-body">
+                    <% if (product.seller) { %>
+                    <h5 class="fw-bold"><%= product.seller.name %></h5>
+                    <p class="text-muted small mb-2">
+                        <i class="bi bi-clock me-1"></i>Member since <%= new Date(product.seller.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long' }) %>
+                    </p>
+                    <p class="text-muted small mb-3">
+                        <i class="bi bi-geo-alt me-1"></i><%= product.seller.address?.city || 'Location not specified' %>
+                    </p>
+                    
+                    <% if (typeof user !== 'undefined' && user) { %>
+                    <div id="contactInfo">
+                        <button class="btn btn-primary w-100 mb-2" onclick="showPhone()">
+                            <i class="bi bi-telephone me-2"></i>Show Phone Number
+                        </button>
+                        <div id="phoneNumber" style="display: none;">
+                            <div class="alert alert-success">
+                                <i class="bi bi-telephone-fill me-2"></i>
+                                <strong><%= product.seller.phone %></strong>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else { %>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <a href="/auth/login" class="alert-link">Login</a> to see seller's contact details
+                    </div>
+                    <% } %>
+                    <% } else { %>
+                    <p class="text-muted">Seller information not available</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Description -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-file-text me-2"></i>Description</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0" style="white-space: pre-line;"><%= product.description %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Related Listings -->
+    <% if (relatedProducts && relatedProducts.length > 0) { %>
+    <div class="mt-5">
+        <h4 class="mb-4"><i class="bi bi-grid me-2"></i>Related Listings</h4>
+        <div class="row g-4">
+            <% relatedProducts.forEach(related => { %>
+            <div class="col-lg-3 col-md-6">
+                <div class="card product-card h-100 shadow-sm">
+                    <div class="position-relative">
+                        <img src="<%= related.images.length > 0 ? related.images[0] : '/images/no-image.png' %>" 
+                             class="card-img-top product-img" alt="<%= related.title %>">
+                        <span class="badge condition-badge 
+                            <%= related.condition === 'Like New' ? 'bg-success' : 
+                               related.condition === 'Good' ? 'bg-primary' : 
+                               related.condition === 'Fair' ? 'bg-warning' : 'bg-danger' %>">
+                            <%= related.condition %>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title text-truncate"><%= related.title %></h6>
+                        <p class="card-text text-primary fw-bold">₹<%= related.price.toLocaleString('en-IN') %></p>
+                        <div class="small text-muted">
+                            <i class="bi bi-geo-alt"></i> <%= related.location.city || 'N/A' %>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <a href="/products/<%= related._id %>" class="btn btn-outline-primary btn-sm w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<script>
+function changeImage(thumb, src) {
+    document.getElementById('mainImage').src = src;
+    document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active'));
+    thumb.classList.add('active');
+}
+
+function showPhone() {
+    document.getElementById('phoneNumber').style.display = 'block';
+    document.querySelector('#contactInfo button').style.display = 'none';
+}
+</script>
+
+<%- include('../partials/footer') %>

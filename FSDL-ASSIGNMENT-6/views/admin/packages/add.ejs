@@ -1,0 +1,114 @@
+<!-- Add new package form -->
+<%- include('../../partials/header') %>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="mb-4">Add New Package</h1>
+
+      <!-- Package Form -->
+      <form method="POST" action="/admin/packages/add" class="card shadow">
+        <div class="card-body">
+          <!-- Title Field -->
+          <div class="mb-3">
+            <label for="title" class="form-label">Package Title *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="title" 
+              name="title" 
+              placeholder="e.g., Bali Bliss"
+              required
+            >
+          </div>
+
+          <!-- Destination Field -->
+          <div class="mb-3">
+            <label for="destination" class="form-label">Destination *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="destination" 
+              name="destination" 
+              placeholder="e.g., Bali, Indonesia"
+              required
+            >
+          </div>
+
+          <!-- Description Field -->
+          <div class="mb-3">
+            <label for="description" class="form-label">Description *</label>
+            <textarea 
+              class="form-control" 
+              id="description" 
+              name="description" 
+              rows="4"
+              placeholder="Describe the package in detail..."
+              required
+            ></textarea>
+          </div>
+
+          <!-- Price Field -->
+          <div class="mb-3">
+            <label for="price" class="form-label">Price per Person ($) *</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="price" 
+              name="price" 
+              placeholder="e.g., 1200"
+              step="0.01"
+              min="0"
+              required
+            >
+          </div>
+
+          <!-- Duration Field -->
+          <div class="mb-3">
+            <label for="duration" class="form-label">Duration</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="duration" 
+              name="duration" 
+              placeholder="e.g., 7 Days / 6 Nights"
+            >
+          </div>
+
+          <!-- Image URL Field -->
+          <div class="mb-3">
+            <label for="imageUrl" class="form-label">Image URL</label>
+            <input 
+              type="url" 
+              class="form-control" 
+              id="imageUrl" 
+              name="imageUrl" 
+              placeholder="https://example.com/image.jpg"
+            >
+          </div>
+
+          <!-- Seats Field -->
+          <div class="mb-3">
+            <label for="seats" class="form-label">Available Seats</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="seats" 
+              name="seats" 
+              value="20"
+              min="1"
+            >
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save Package</button>
+            <a href="/admin/packages" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,97 @@
+<!-- Header/Navbar partial - displayed on every page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TravelEase - Travel Agency</title>
+  <!-- Bootstrap 5 CSS from CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <!-- Brand/Logo -->
+      <a class="navbar-brand fw-bold" href="/">
+        ✈️ TravelEase
+      </a>
+
+      <!-- Hamburger Menu Button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <!-- Home Link -->
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Home</a>
+          </li>
+
+          <!-- Packages Link -->
+          <li class="nav-item">
+            <a class="nav-link" href="/packages">Packages</a>
+          </li>
+
+          <!-- Conditional Links Based on Auth Status -->
+          <% if (session.userId) { %>
+            <!-- If user is logged in -->
+            <% if (session.userRole === 'admin') { %>
+              <!-- Admin only links -->
+              <li class="nav-item">
+                <a class="nav-link" href="/admin">Admin Panel</a>
+              </li>
+            <% } else { %>
+              <!-- Regular user links -->
+              <li class="nav-item">
+                <a class="nav-link" href="/bookings/history">My Bookings</a>
+              </li>
+            <% } %>
+
+            <!-- Logout Link (for all logged-in users) -->
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+          <% } else { %>
+            <!-- If user is not logged in -->
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages Container -->
+  <div class="container mt-4">
+    <!-- Success Messages -->
+    <% if (messages.success && messages.success.length > 0) { %>
+      <% messages.success.forEach(msg => { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Success!</strong> <%= msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% }); %>
+    <% } %>
+
+    <!-- Error Messages -->
+    <% if (messages.error && messages.error.length > 0) { %>
+      <% messages.error.forEach(msg => { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error!</strong> <%= msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% }); %>
+    <% } %>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="py-4">

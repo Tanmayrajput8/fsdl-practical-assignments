@@ -1,0 +1,127 @@
+<!-- Public homepage with hero section and featured packages -->
+<%- include('./partials/header') %>
+
+<!-- Hero Section -->
+<div class="hero-section text-white text-center py-5">
+  <div class="container">
+    <h1 class="display-3 fw-bold mb-4">Explore the World with TravelEase</h1>
+    <p class="lead mb-4">Discover amazing travel packages and create unforgettable memories</p>
+    <a href="/packages" class="btn btn-light btn-lg">
+      Browse Packages →
+    </a>
+  </div>
+</div>
+
+<!-- Featured Packages Section -->
+<div class="container py-5">
+  <h2 class="text-center mb-5">Featured Packages</h2>
+
+  <% if (packages.length > 0) { %>
+    <div class="row g-4">
+      <% packages.forEach(pkg => { %>
+        <div class="col-md-4">
+          <!-- Package Card -->
+          <div class="card h-100 shadow-sm hover-card">
+            <!-- Package Image/Placeholder -->
+            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+              <img 
+                src="<%= pkg.imageUrl %>" 
+                alt="<%= pkg.title %>" 
+                style="width: 100%; height: 100%; object-fit: cover;"
+                onerror="this.style.display='none'"
+              >
+            </div>
+
+            <div class="card-body">
+              <!-- Package Title -->
+              <h5 class="card-title"><%= pkg.title %></h5>
+
+              <!-- Destination Badge -->
+              <div class="mb-3">
+                <span class="badge bg-info"><%= pkg.destination %></span>
+              </div>
+
+              <!-- Short Description -->
+              <p class="card-text text-muted">
+                <%= pkg.description.substring(0, 100) %>...
+              </p>
+
+              <!-- Price -->
+              <h6 class="text-primary fw-bold">$<%= pkg.price %> per person</h6>
+
+              <!-- Duration -->
+              <p class="text-muted small">📅 <%= pkg.duration %></p>
+            </div>
+
+            <div class="card-footer bg-white border-top">
+              <!-- View Details Button -->
+              <a href="/packages/<%= pkg._id %>" class="btn btn-outline-primary w-100">
+                View Details
+              </a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+
+    <!-- Browse All Packages Button -->
+    <div class="text-center mt-5">
+      <a href="/packages" class="btn btn-primary btn-lg">
+        View All Packages
+      </a>
+    </div>
+  <% } %>
+</div>
+
+<!-- Features Section -->
+<div class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Why Choose TravelEase?</h2>
+
+    <div class="row g-4">
+      <!-- Feature 1 -->
+      <div class="col-md-4">
+        <div class="text-center">
+          <div class="display-5 mb-3">🌍</div>
+          <h5>Worldwide Destinations</h5>
+          <p class="text-muted">Explore exotic destinations across the globe with our curated packages.</p>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="col-md-4">
+        <div class="text-center">
+          <div class="display-5 mb-3">💰</div>
+          <h5>Affordable Prices</h5>
+          <p class="text-muted">Get the best value for your money with our competitive pricing.</p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="col-md-4">
+        <div class="text-center">
+          <div class="display-5 mb-3">🤝</div>
+          <h5>Expert Support</h5>
+          <p class="text-muted">Our support team is always ready to help you plan your perfect trip.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/footer') %>
+
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .hover-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+  }
+</style>

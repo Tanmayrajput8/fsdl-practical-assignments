@@ -1,0 +1,213 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Post a New Listing</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/products/create" method="POST" enctype="multipart/form-data" id="createForm">
+                        
+                        <!-- Basic Info -->
+                        <h5 class="mb-3 text-primary"><i class="bi bi-info-circle me-2"></i>Basic Information</h5>
+                        
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control <%= errors.find(e => e.path === 'title') ? 'is-invalid' : '' %>" 
+                                   id="title" name="title" value="<%= typeof formData !== 'undefined' && formData.title ? formData.title : '' %>" 
+                                   placeholder="e.g., 2020 Honda City Petrol - Single Owner" required>
+                            <% const titleError = errors.find(e => e.path === 'title'); %>
+                            <% if (titleError) { %>
+                            <div class="invalid-feedback"><%= titleError.msg %></div>
+                            <% } %>
+                            <div class="form-text">5-100 characters</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control <%= errors.find(e => e.path === 'description') ? 'is-invalid' : '' %>" 
+                                      id="description" name="description" rows="4" 
+                                      placeholder="Describe your vehicle in detail - features, service history, any modifications, etc." required><%= typeof formData !== 'undefined' && formData.description ? formData.description : '' %></textarea>
+                            <% const descError = errors.find(e => e.path === 'description'); %>
+                            <% if (descError) { %>
+                            <div class="invalid-feedback"><%= descError.msg %></div>
+                            <% } %>
+                            <div class="form-text">Minimum 20 characters</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                <select class="form-select <%= errors.find(e => e.path === 'category') ? 'is-invalid' : '' %>" 
+                                        id="category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <% ['Car', 'Bike', 'Scooter', 'Bicycle', 'Truck', 'Other'].forEach(cat => { %>
+                                    <option value="<%= cat %>" <%= typeof formData !== 'undefined' && formData.category === cat ? 'selected' : '' %>><%= cat %></option>
+                                    <% }); %>
+                                </select>
+                                <% const catError = errors.find(e => e.path === 'category'); %>
+                                <% if (catError) { %>
+                                <div class="invalid-feedback"><%= catError.msg %></div>
+                                <% } %>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="condition" class="form-label">Condition <span class="text-danger">*</span></label>
+                                <select class="form-select <%= errors.find(e => e.path === 'condition') ? 'is-invalid' : '' %>" 
+                                        id="condition" name="condition" required>
+                                    <option value="">Select Condition</option>
+                                    <% ['Like New', 'Good', 'Fair', 'Poor'].forEach(cond => { %>
+                                    <option value="<%= cond %>" <%= typeof formData !== 'undefined' && formData.condition === cond ? 'selected' : '' %>><%= cond %></option>
+                                    <% }); %>
+                                </select>
+                                <% const condError = errors.find(e => e.path === 'condition'); %>
+                                <% if (condError) { %>
+                                <div class="invalid-feedback"><%= condError.msg %></div>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Vehicle Details -->
+                        <h5 class="mb-3 text-primary"><i class="bi bi-car-front me-2"></i>Vehicle Details</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="brand" class="form-label">Brand <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control <%= errors.find(e => e.path === 'brand') ? 'is-invalid' : '' %>" 
+                                       id="brand" name="brand" value="<%= typeof formData !== 'undefined' && formData.brand ? formData.brand : '' %>" 
+                                       placeholder="e.g., Honda, Maruti, Bajaj" required>
+                                <% const brandError = errors.find(e => e.path === 'brand'); %>
+                                <% if (brandError) { %>
+                                <div class="invalid-feedback"><%= brandError.msg %></div>
+                                <% } %>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="year" class="form-label">Year <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control <%= errors.find(e => e.path === 'year') ? 'is-invalid' : '' %>" 
+                                       id="year" name="year" value="<%= typeof formData !== 'undefined' && formData.year ? formData.year : '' %>" 
+                                       min="1990" max="<%= new Date().getFullYear() %>" placeholder="e.g., 2020" required>
+                                <% const yearError = errors.find(e => e.path === 'year'); %>
+                                <% if (yearError) { %>
+                                <div class="invalid-feedback"><%= yearError.msg %></div>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="kmDriven" class="form-label">KM Driven <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control <%= errors.find(e => e.path === 'kmDriven') ? 'is-invalid' : '' %>" 
+                                       id="kmDriven" name="kmDriven" value="<%= typeof formData !== 'undefined' && formData.kmDriven ? formData.kmDriven : '' %>" 
+                                       min="0" placeholder="e.g., 50000" required>
+                                <% const kmError = errors.find(e => e.path === 'kmDriven'); %>
+                                <% if (kmError) { %>
+                                <div class="invalid-feedback"><%= kmError.msg %></div>
+                                <% } %>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="fuelType" class="form-label">Fuel Type</label>
+                                <select class="form-select" id="fuelType" name="fuelType">
+                                    <% ['Petrol', 'Diesel', 'Electric', 'CNG', 'Other', 'N/A'].forEach(fuel => { %>
+                                    <option value="<%= fuel %>" <%= typeof formData !== 'undefined' && formData.fuelType === fuel ? 'selected' : '' %>><%= fuel %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price (₹) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control <%= errors.find(e => e.path === 'price') ? 'is-invalid' : '' %>" 
+                                       id="price" name="price" value="<%= typeof formData !== 'undefined' && formData.price ? formData.price : '' %>" 
+                                       min="1" placeholder="e.g., 500000" required>
+                            </div>
+                            <% const priceError = errors.find(e => e.path === 'price'); %>
+                            <% if (priceError) { %>
+                            <div class="text-danger small mt-1"><%= priceError.msg %></div>
+                            <% } %>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Location -->
+                        <h5 class="mb-3 text-primary"><i class="bi bi-geo-alt me-2"></i>Location</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" 
+                                       value="<%= typeof formData !== 'undefined' && formData.city ? formData.city : '' %>" 
+                                       placeholder="e.g., Mumbai">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="state" class="form-label">State</label>
+                                <input type="text" class="form-control" id="state" name="state" 
+                                       value="<%= typeof formData !== 'undefined' && formData.state ? formData.state : '' %>" 
+                                       placeholder="e.g., Maharashtra">
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Images -->
+                        <h5 class="mb-3 text-primary"><i class="bi bi-images me-2"></i>Images</h5>
+                        
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Upload Images (Max 5)</label>
+                            <input type="file" class="form-control" id="images" name="images" 
+                                   accept="image/jpeg,image/jpg,image/png,image/webp" multiple>
+                            <div class="form-text">Allowed formats: JPEG, PNG, WEBP. Max size: 2MB each.</div>
+                        </div>
+                        
+                        <div id="imagePreview" class="row g-2 mb-3"></div>
+                        
+                        <hr class="my-4">
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Post Listing
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('images').addEventListener('change', function(e) {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    
+    if (this.files.length > 5) {
+        alert('You can upload maximum 5 images');
+        this.value = '';
+        return;
+    }
+    
+    Array.from(this.files).forEach((file, index) => {
+        if (file.size > 2 * 1024 * 1024) {
+            alert(`Image ${index + 1} exceeds 2MB limit`);
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const col = document.createElement('div');
+            col.className = 'col-4 col-md-2';
+            col.innerHTML = `<img src="${e.target.result}" class="img-thumbnail" style="height: 100px; object-fit: cover;">`;
+            preview.appendChild(col);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+
+<%- include('../partials/footer') %>

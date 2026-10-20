@@ -1,0 +1,22 @@
+{
+  "name": "travel-agency",
+  "version": "1.0.0",
+  "description": "A complete travel agency web application built with Express.js, MongoDB, and EJS",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "seed": "node seed.js"
+  },
+  "keywords": ["travel", "express", "mongodb", "ejs"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^7.0.0"
+  }
+}

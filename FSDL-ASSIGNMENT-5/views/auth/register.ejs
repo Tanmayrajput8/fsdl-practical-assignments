@@ -1,0 +1,183 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold"><i class="bi bi-person-plus text-primary me-2"></i>Create Account</h2>
+                        <p class="text-muted">Join WheelDeal and start buying or selling</p>
+                    </div>
+                    
+                    <form action="/auth/register" method="POST" id="registerForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control <%= errors.find(e => e.path === 'name') ? 'is-invalid' : '' %>" 
+                                       id="name" name="name" value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>" 
+                                       placeholder="John Doe" required>
+                                <% const nameError = errors.find(e => e.path === 'name'); %>
+                                <% if (nameError) { %>
+                                <div class="invalid-feedback"><%= nameError.msg %></div>
+                                <% } %>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Gmail Address <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control <%= errors.find(e => e.path === 'email') ? 'is-invalid' : '' %>" 
+                                       id="email" name="email" value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>" 
+                                       placeholder="name@gmail.com" required>
+                                <% const emailError = errors.find(e => e.path === 'email'); %>
+                                <% if (emailError) { %>
+                                <div class="invalid-feedback"><%= emailError.msg %></div>
+                                <% } else { %>
+                                <div class="form-text">Only Gmail addresses accepted</div>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control <%= errors.find(e => e.path === 'password') ? 'is-invalid' : '' %>" 
+                                           id="password" name="password" placeholder="••••••••" required>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')">
+                                        <i class="bi bi-eye" id="password-icon"></i>
+                                    </button>
+                                </div>
+                                <% const passwordError = errors.find(e => e.path === 'password'); %>
+                                <% if (passwordError) { %>
+                                <div class="text-danger small mt-1"><%= passwordError.msg %></div>
+                                <% } %>
+                                <div id="passwordStrength" class="progress mt-2" style="height: 5px; display: none;">
+                                    <div class="progress-bar" role="progressbar"></div>
+                                </div>
+                                <div class="form-text">Min 6 chars, include uppercase, number & special char</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control <%= errors.find(e => e.path === 'confirmPassword') ? 'is-invalid' : '' %>" 
+                                           id="confirmPassword" name="confirmPassword" placeholder="••••••••" required>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('confirmPassword')">
+                                        <i class="bi bi-eye" id="confirmPassword-icon"></i>
+                                    </button>
+                                </div>
+                                <% const confirmError = errors.find(e => e.path === 'confirmPassword'); %>
+                                <% if (confirmError) { %>
+                                <div class="text-danger small mt-1"><%= confirmError.msg %></div>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control <%= errors.find(e => e.path === 'phone') ? 'is-invalid' : '' %>" 
+                                       id="phone" name="phone" value="<%= typeof formData !== 'undefined' && formData.phone ? formData.phone : '' %>" 
+                                       placeholder="9876543210" maxlength="10" required>
+                                <% const phoneError = errors.find(e => e.path === 'phone'); %>
+                                <% if (phoneError) { %>
+                                <div class="invalid-feedback"><%= phoneError.msg %></div>
+                                <% } else { %>
+                                <div class="form-text">10-digit Indian mobile number</div>
+                                <% } %>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="role" class="form-label">I want to <span class="text-danger">*</span></label>
+                                <select class="form-select" id="role" name="role" required>
+                                    <option value="buyer" <%= typeof formData !== 'undefined' && formData.role === 'buyer' ? 'selected' : '' %>>Buy</option>
+                                    <option value="seller" <%= typeof formData !== 'undefined' && formData.role === 'seller' ? 'selected' : '' %>>Sell</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" 
+                                       value="<%= typeof formData !== 'undefined' && formData.city ? formData.city : '' %>" 
+                                       placeholder="Mumbai">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="state" class="form-label">State</label>
+                                <input type="text" class="form-control" id="state" name="state" 
+                                       value="<%= typeof formData !== 'undefined' && formData.state ? formData.state : '' %>" 
+                                       placeholder="Maharashtra">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Create Account
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-muted">Already have an account? <a href="/auth/login" class="text-primary">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById(fieldId + '-icon');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.replace('bi-eye', 'bi-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.replace('bi-eye-slash', 'bi-eye');
+    }
+}
+
+// Password strength indicator
+document.getElementById('password').addEventListener('input', function(e) {
+    const password = e.target.value;
+    const strengthBar = document.getElementById('passwordStrength');
+    const progressBar = strengthBar.querySelector('.progress-bar');
+    
+    if (password.length === 0) {
+        strengthBar.style.display = 'none';
+        return;
+    }
+    
+    strengthBar.style.display = 'block';
+    let strength = 0;
+    
+    if (password.length >= 6) strength += 25;
+    if (password.match(/[A-Z]/)) strength += 25;
+    if (password.match(/[0-9]/)) strength += 25;
+    if (password.match(/[@$!%*?&]/)) strength += 25;
+    
+    progressBar.style.width = strength + '%';
+    
+    if (strength <= 25) {
+        progressBar.className = 'progress-bar bg-danger';
+    } else if (strength <= 50) {
+        progressBar.className = 'progress-bar bg-warning';
+    } else if (strength <= 75) {
+        progressBar.className = 'progress-bar bg-info';
+    } else {
+        progressBar.className = 'progress-bar bg-success';
+    }
+});
+</script>
+
+<%- include('../partials/footer') %>

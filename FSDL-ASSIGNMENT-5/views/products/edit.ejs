@@ -1,0 +1,193 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-pencil me-2"></i>Edit Listing</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/products/<%= product._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                        
+                        <!-- Basic Info -->
+                        <h5 class="mb-3 text-primary"><i class="bi bi-info-circle me-2"></i>Basic Information</h5>
+                        
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control <%= errors.find(e => e.path === 'title') ? 'is-invalid' : '' %>" 
+                                   id="title" name="title" value="<%= formData.title || product.title %>" required>
+                            <% const titleError = errors.find(e => e.path === 'title'); %>
+                            <% if (titleError) { %>
+                            <div class="invalid-feedback"><%= titleError.msg %></div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control <%= errors.find(e => e.path === 'description') ? 'is-invalid' : '' %>" 
+                                      id="description" name="description" rows="4" required><%= formData.description || product.description %></textarea>
+                            <% const descError = errors.find(e => e.path === 'description'); %>
+                            <% if (descError) { %>
+                            <div class="invalid-feedback"><%= descError.msg %></div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <% ['Car', 'Bike', 'Scooter', 'Bicycle', 'Truck', 'Other'].forEach(cat => { %>
+                                    <option value="<%= cat %>" <%= (formData.category || product.category) === cat ? 'selected' : '' %>><%= cat %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="condition" class="form-label">Condition <span class="text-danger">*</span></label>
+                                <select class="form-select" id="condition" name="condition" required>
+                                    <% ['Like New', 'Good', 'Fair', 'Poor'].forEach(cond => { %>
+                                    <option value="<%= cond %>" <%= (formData.condition || product.condition) === cond ? 'selected' : '' %>><%= cond %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Vehicle Details -->
+                        <h5 class="mb-3 text-primary"><i class="bi bi-car-front me-2"></i>Vehicle Details</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="brand" class="form-label">Brand <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="brand" name="brand" 
+                                       value="<%= formData.brand || product.brand %>" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="year" class="form-label">Year <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="year" name="year" 
+                                       value="<%= formData.year || product.year %>" min="1990" max="<%= new Date().getFullYear() %>" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="kmDriven" class="form-label">KM Driven <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="kmDriven" name="kmDriven" 
+                                       value="<%= formData.kmDriven || product.kmDriven %>" min="0" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="fuelType" class="form-label">Fuel Type</label>
+                                <select class="form-select" id="fuelType" name="fuelType">
+                                    <% ['Petrol', 'Diesel', 'Electric', 'CNG', 'Other', 'N/A'].forEach(fuel => { %>
+                                    <option value="<%= fuel %>" <%= (formData.fuelType || product.fuelType) === fuel ? 'selected' : '' %>><%= fuel %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price (₹) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="price" name="price" 
+                                       value="<%= formData.price || product.price %>" min="1" required>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Location -->
+                        <h5 class="mb-3 text-primary"><i class="bi bi-geo-alt me-2"></i>Location</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" 
+                                       value="<%= formData.city || (product.location && product.location.city) || '' %>">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="state" class="form-label">State</label>
+                                <input type="text" class="form-control" id="state" name="state" 
+                                       value="<%= formData.state || (product.location && product.location.state) || '' %>">
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Current Images -->
+                        <h5 class="mb-3 text-primary"><i class="bi bi-images me-2"></i>Images</h5>
+                        
+                        <% if (product.images && product.images.length > 0) { %>
+                        <div class="mb-3">
+                            <label class="form-label">Current Images</label>
+                            <div class="row g-2">
+                                <% product.images.forEach((img, index) => { %>
+                                <div class="col-4 col-md-2">
+                                    <div class="position-relative">
+                                        <img src="<%= img %>" class="img-thumbnail" style="height: 80px; object-fit: cover;">
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" name="removeImages" value="<%= img %>" id="remove-<%= index %>">
+                                            <label class="form-check-label small" for="remove-<%= index %>">Remove</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                        <% } %>
+                        
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Add New Images</label>
+                            <input type="file" class="form-control" id="images" name="images" 
+                                   accept="image/jpeg,image/jpg,image/png,image/webp" multiple>
+                            <div class="form-text">Max 5 images total. Allowed: JPEG, PNG, WEBP. Max size: 2MB each.</div>
+                        </div>
+                        
+                        <div id="imagePreview" class="row g-2 mb-3"></div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg flex-fill">
+                                <i class="bi bi-check-circle me-2"></i>Update Listing
+                            </button>
+                            <a href="/products/<%= product._id %>" class="btn btn-outline-secondary btn-lg">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('images').addEventListener('change', function(e) {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    
+    Array.from(this.files).forEach((file, index) => {
+        if (file.size > 2 * 1024 * 1024) {
+            alert(`Image ${index + 1} exceeds 2MB limit`);
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const col = document.createElement('div');
+            col.className = 'col-4 col-md-2';
+            col.innerHTML = `<img src="${e.target.result}" class="img-thumbnail" style="height: 80px; object-fit: cover;">`;
+            preview.appendChild(col);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,91 @@
+<!-- Admin bookings list page -->
+<%- include('../../partials/header') %>
+
+<div class="container">
+  <h1 class="mb-4">Manage Bookings</h1>
+
+  <% if (bookings.length > 0) { %>
+    <!-- Bookings Table -->
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>User Name</th>
+            <th>Package</th>
+            <th>Travelers</th>
+            <th>Total Price</th>
+            <th>Current Status</th>
+            <th>Update Status</th>
+            <th>Booked Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% bookings.forEach(booking => { %>
+            <tr>
+              <!-- User Name -->
+              <td><%= booking.user.name %></td>
+
+              <!-- Package Name -->
+              <td>
+                <strong><%= booking.package.title %></strong><br>
+                <small class="text-muted"><%= booking.package.destination %></small>
+              </td>
+
+              <!-- Number of Travelers -->
+              <td><%= booking.travelers %></td>
+
+              <!-- Total Price -->
+              <td><strong>$<%= booking.totalPrice %></strong></td>
+
+              <!-- Current Status Badge -->
+              <td>
+                <% if (booking.status === 'Confirmed') { %>
+                  <span class="badge bg-success"><%= booking.status %></span>
+                <% } else if (booking.status === 'Pending') { %>
+                  <span class="badge bg-warning"><%= booking.status %></span>
+                <% } else if (booking.status === 'Cancelled') { %>
+                  <span class="badge bg-danger"><%= booking.status %></span>
+                <% } %>
+              </td>
+
+              <!-- Update Status Form -->
+              <td>
+                <form method="POST" action="/admin/bookings/status/<%= booking._id %>" class="d-flex gap-1">
+                  <!-- Status Dropdown -->
+                  <select name="status" class="form-select form-select-sm" required>
+                    <option value="Pending" <%= booking.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="Confirmed" <%= booking.status === 'Confirmed' ? 'selected' : '' %>>Confirmed</option>
+                    <option value="Cancelled" <%= booking.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                  </select>
+
+                  <!-- Update Button -->
+                  <button type="submit" class="btn btn-sm btn-outline-primary">✓</button>
+                </form>
+              </td>
+
+              <!-- Booked Date -->
+              <td>
+                <small class="text-muted">
+                  <% const date = new Date(booking.bookedAt); %>
+                  <%= date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                </small>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <!-- No bookings message -->
+    <div class="alert alert-info">
+      <p class="mb-0">No bookings found yet.</p>
+    </div>
+  <% } %>
+
+  <!-- Back Link -->
+  <div class="mt-4">
+    <a href="/admin" class="btn btn-outline-secondary">← Back to Dashboard</a>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

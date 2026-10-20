@@ -1,0 +1,60 @@
+<!-- Login page -->
+<%- include('../partials/header') %>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <h2 class="card-title text-center mb-4">Welcome Back</h2>
+
+          <!-- Login Form -->
+          <form method="POST" action="/login">
+            <!-- Email Field -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                name="email" 
+                placeholder="Enter your email"
+                required
+              >
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="password" 
+                name="password" 
+                placeholder="Enter your password"
+                required
+              >
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </form>
+
+          <!-- Register Link -->
+          <div class="text-center mt-3">
+            <p>Don't have an account? <a href="/register">Register here</a></p>
+          </div>
+
+          <!-- Demo Credentials for Testing -->
+          <div class="alert alert-info mt-4 small">
+            <strong>Demo Credentials:</strong><br>
+            Email: admin@travel.com<br>
+            Password: admin123
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

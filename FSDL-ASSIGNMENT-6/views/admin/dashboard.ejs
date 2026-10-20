@@ -1,0 +1,65 @@
+<!-- Admin dashboard overview page -->
+<%- include('../partials/header') %>
+
+<div class="container">
+  <h1 class="mb-4">Admin Dashboard</h1>
+
+  <!-- Statistics Cards -->
+  <div class="row mb-4">
+    <!-- Total Packages Card -->
+    <div class="col-md-6">
+      <div class="card bg-primary text-white shadow">
+        <div class="card-body">
+          <h5 class="card-title">Total Packages</h5>
+          <h2 class="display-4"><%= totalPackages %></h2>
+          <a href="/admin/packages" class="btn btn-light btn-sm mt-3">Manage Packages</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Bookings Card -->
+    <div class="col-md-6">
+      <div class="card bg-success text-white shadow">
+        <div class="card-body">
+          <h5 class="card-title">Total Bookings</h5>
+          <h2 class="display-4"><%= totalBookings %></h2>
+          <a href="/admin/bookings" class="btn btn-light btn-sm mt-3">Manage Bookings</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links Section -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Quick Actions</h5>
+      <div class="list-group">
+        <!-- Add New Package Link -->
+        <a href="/admin/packages/add" class="list-group-item list-group-item-action">
+          <h6 class="mb-1">➕ Add New Package</h6>
+          <p class="text-muted mb-0">Create a new travel package</p>
+        </a>
+
+        <!-- View All Packages Link -->
+        <a href="/admin/packages" class="list-group-item list-group-item-action">
+          <h6 class="mb-1">📦 Manage All Packages</h6>
+          <p class="text-muted mb-0">Edit or delete existing packages</p>
+        </a>
+
+        <!-- View All Bookings Link -->
+        <a href="/admin/bookings" class="list-group-item list-group-item-action">
+          <h6 class="mb-1">📋 Manage All Bookings</h6>
+          <p class="text-muted mb-0">Update booking statuses</p>
+        </a>
+
+        <!-- Logout Link -->
+        <a href="/logout" class="list-group-item list-group-item-action text-danger">
+          <h6 class="mb-1">🚪 Logout</h6>
+          <p class="text-muted mb-0">Exit admin panel</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

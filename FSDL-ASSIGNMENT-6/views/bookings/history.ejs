@@ -1,0 +1,79 @@
+<!-- User booking history page -->
+<%- include('../partials/header') %>
+
+<div class="container">
+  <h1 class="mb-4">My Booking History</h1>
+
+  <% if (bookings.length > 0) { %>
+    <!-- Bookings Table -->
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Package Name</th>
+            <th>Destination</th>
+            <th>Travelers</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Booked Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% bookings.forEach(booking => { %>
+            <tr>
+              <!-- Package Name -->
+              <td>
+                <a href="/packages/<%= booking.package._id %>">
+                  <%= booking.package.title %>
+                </a>
+              </td>
+
+              <!-- Destination -->
+              <td><%= booking.package.destination %></td>
+
+              <!-- Number of Travelers -->
+              <td><%= booking.travelers %></td>
+
+              <!-- Total Price -->
+              <td><strong>$<%= booking.totalPrice %></strong></td>
+
+              <!-- Status Badge -->
+              <td>
+                <% if (booking.status === 'Confirmed') { %>
+                  <span class="badge bg-success"><%= booking.status %></span>
+                <% } else if (booking.status === 'Pending') { %>
+                  <span class="badge bg-warning"><%= booking.status %></span>
+                <% } else if (booking.status === 'Cancelled') { %>
+                  <span class="badge bg-danger"><%= booking.status %></span>
+                <% } %>
+              </td>
+
+              <!-- Booked Date -->
+              <td>
+                <small class="text-muted">
+                  <% const date = new Date(booking.bookedAt); %>
+                  <%= date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                </small>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <!-- No bookings message -->
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">No bookings yet</h4>
+      <p>You haven't made any bookings yet. Start exploring our amazing packages!</p>
+      <hr>
+      <a href="/packages" class="btn btn-primary">Browse Packages</a>
+    </div>
+  <% } %>
+
+  <!-- Back Link -->
+  <div class="mt-4">
+    <a href="/" class="btn btn-outline-secondary">← Back to Home</a>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

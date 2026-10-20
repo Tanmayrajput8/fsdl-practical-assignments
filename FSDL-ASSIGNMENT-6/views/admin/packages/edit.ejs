@@ -1,0 +1,113 @@
+<!-- Edit existing package form -->
+<%- include('../../partials/header') %>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="mb-4">Edit Package</h1>
+
+      <!-- Package Form -->
+      <form method="POST" action="/admin/packages/edit/<%= package._id %>" class="card shadow">
+        <div class="card-body">
+          <!-- Title Field -->
+          <div class="mb-3">
+            <label for="title" class="form-label">Package Title *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="title" 
+              name="title" 
+              value="<%= package.title %>"
+              required
+            >
+          </div>
+
+          <!-- Destination Field -->
+          <div class="mb-3">
+            <label for="destination" class="form-label">Destination *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="destination" 
+              name="destination" 
+              value="<%= package.destination %>"
+              required
+            >
+          </div>
+
+          <!-- Description Field -->
+          <div class="mb-3">
+            <label for="description" class="form-label">Description *</label>
+            <textarea 
+              class="form-control" 
+              id="description" 
+              name="description" 
+              rows="4"
+              required
+            ><%= package.description %></textarea>
+          </div>
+
+          <!-- Price Field -->
+          <div class="mb-3">
+            <label for="price" class="form-label">Price per Person ($) *</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="price" 
+              name="price" 
+              value="<%= package.price %>"
+              step="0.01"
+              min="0"
+              required
+            >
+          </div>
+
+          <!-- Duration Field -->
+          <div class="mb-3">
+            <label for="duration" class="form-label">Duration</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="duration" 
+              name="duration" 
+              value="<%= package.duration %>"
+            >
+          </div>
+
+          <!-- Image URL Field -->
+          <div class="mb-3">
+            <label for="imageUrl" class="form-label">Image URL</label>
+            <input 
+              type="url" 
+              class="form-control" 
+              id="imageUrl" 
+              name="imageUrl" 
+              value="<%= package.imageUrl %>"
+            >
+          </div>
+
+          <!-- Seats Field -->
+          <div class="mb-3">
+            <label for="seats" class="form-label">Available Seats</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="seats" 
+              name="seats" 
+              value="<%= package.seats %>"
+              min="1"
+            >
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Update Package</button>
+            <a href="/admin/packages" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

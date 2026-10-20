@@ -1,0 +1,77 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold"><i class="bi bi-box-arrow-in-right text-primary me-2"></i>Welcome Back</h2>
+                        <p class="text-muted">Login to your WheelDeal account</p>
+                    </div>
+                    
+                    <form action="/auth/login" method="POST">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Gmail Address</label>
+                            <input type="email" class="form-control <%= errors.find(e => e.path === 'email') ? 'is-invalid' : '' %>" 
+                                   id="email" name="email" value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>" 
+                                   placeholder="name@gmail.com" required autofocus>
+                            <% const emailError = errors.find(e => e.path === 'email'); %>
+                            <% if (emailError) { %>
+                            <div class="invalid-feedback"><%= emailError.msg %></div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control <%= errors.find(e => e.path === 'password') ? 'is-invalid' : '' %>" 
+                                       id="password" name="password" placeholder="••••••••" required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
+                                    <i class="bi bi-eye" id="password-icon"></i>
+                                </button>
+                            </div>
+                            <% const passwordError = errors.find(e => e.path === 'password'); %>
+                            <% if (passwordError) { %>
+                            <div class="text-danger small mt-1"><%= passwordError.msg %></div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                            </div>
+                            <a href="#" class="text-primary small">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-muted">Don't have an account? <a href="/auth/register" class="text-primary">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const field = document.getElementById('password');
+    const icon = document.getElementById('password-icon');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.replace('bi-eye', 'bi-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.replace('bi-eye-slash', 'bi-eye');
+    }
+}
+</script>
+
+<%- include('../partials/footer') %>

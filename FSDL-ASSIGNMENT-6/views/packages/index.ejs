@@ -1,0 +1,122 @@
+<!-- All packages listing with filter -->
+<%- include('../partials/header') %>
+
+<div class="container">
+  <h1 class="mb-4">Explore Our Packages</h1>
+
+  <!-- Filter Section -->
+  <div class="card mb-4 bg-light">
+    <div class="card-body">
+      <h5 class="card-title">Filter Packages</h5>
+      <form method="GET" action="/packages" class="row g-3">
+        <!-- Destination Filter -->
+        <div class="col-md-5">
+          <label for="destination" class="form-label">Destination</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="destination" 
+            name="destination" 
+            placeholder="Search by destination"
+            value="<%= destination %>"
+          >
+        </div>
+
+        <!-- Max Price Filter -->
+        <div class="col-md-5">
+          <label for="maxPrice" class="form-label">Max Price ($)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="maxPrice" 
+            name="maxPrice" 
+            placeholder="e.g., 5000"
+            value="<%= maxPrice %>"
+          >
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Packages Grid -->
+  <% if (packages.length > 0) { %>
+    <div class="row g-4">
+      <% packages.forEach(pkg => { %>
+        <div class="col-md-4">
+          <!-- Package Card -->
+          <div class="card h-100 shadow-sm hover-card">
+            <!-- Package Image/Placeholder -->
+            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+              <img 
+                src="<%= pkg.imageUrl %>" 
+                alt="<%= pkg.title %>" 
+                style="width: 100%; height: 100%; object-fit: cover;"
+                onerror="this.style.display='none'"
+              >
+              <span class="text-white text-center">
+                <i class="bi bi-image"></i> <%= pkg.title %>
+              </span>
+            </div>
+
+            <div class="card-body">
+              <!-- Package Title -->
+              <h5 class="card-title"><%= pkg.title %></h5>
+
+              <!-- Destination Badge -->
+              <div class="mb-2">
+                <span class="badge bg-info"><%= pkg.destination %></span>
+              </div>
+
+              <!-- Description (truncated) -->
+              <p class="card-text text-muted small">
+                <%= pkg.description.substring(0, 80) %>...
+              </p>
+
+              <!-- Price -->
+              <h6 class="text-primary fw-bold">$<%= pkg.price %></h6>
+
+              <!-- Duration -->
+              <p class="text-muted small">📅 <%= pkg.duration %></p>
+
+              <!-- Available Seats -->
+              <p class="text-muted small">💺 <%= pkg.seats %> seats available</p>
+            </div>
+
+            <div class="card-footer bg-white border-top">
+              <!-- View Details Button -->
+              <a href="/packages/<%= pkg._id %>" class="btn btn-outline-primary w-100">
+                View Details
+              </a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <!-- No packages found message -->
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">No packages found</h4>
+      <p>No packages match your search criteria. Please try different filters.</p>
+      <hr>
+      <a href="/packages" class="btn btn-sm btn-outline-primary">Clear Filters</a>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>
+
+<style>
+  .hover-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+  }
+</style>
