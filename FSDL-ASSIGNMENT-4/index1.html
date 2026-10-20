@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Business Dashboard</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- D3.js for extra visualizations -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Noto+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Our custom CSS -->
+  <link rel="stylesheet" href="index1.css" />
+</head>
+
+<body>
+<main class="max-w-screen-xl mx-auto px-5 py-7">
+
+  <!-- ===== TOP HEADER ===== -->
+  <header class="header-bar">
+    <div>
+      <!-- Logo + Title -->
+      <div class="flex items-center gap-3">
+
+        <!-- Amazon logo (using remote SVG for simplicity) -->
+        <div class="logo-icon">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon logo" width="44" height="44" />
+        </div>
+
+        <div>
+          <h1 class="site-title">amazon <span class="highlight-orange">Analytics</span></h1>
+          <p class="site-sub">Seller &amp; Business Intelligence · Live Numbers</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right side: time + refresh -->
+    <div class="header-right">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        <span>LIVE &nbsp;·&nbsp; Last updated: <strong id="lastUpdated">--:--</strong></span>
+      </div>
+      <!-- tiny sparkline using D3 -->
+      <div id="sparkline-container" style="margin-left:1rem;">
+        <svg id="sparkline" width="120" height="30"></svg>
+      </div>
+      <button id="refreshBtn" onclick="refreshAll()">
+        <svg class="refresh-icon" id="refreshIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"/>
+          <polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        Refresh Data
+      </button>
+      <button id="exportBtn" onclick="exportCharts()">
+        📤 Export
+      </button>
+      <button id="themeBtn" onclick="toggleTheme()" title="Toggle light/dark theme">
+        🌓
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== METRIC CARDS — TOP ROW ===== -->
+  <div class="bento-grid" style="margin-bottom: 1rem;">
+
+    <!-- Card 1: Total Money Earned -->
+    <div class="col-3 metric-card card-blue">
+      <div class="metric-glow glow-blue"></div>
+      <p class="card-label">Total Money Earned</p>
+      <p class="card-value blue-text" id="m-revenue">—</p>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <span class="footer-label">vs last month</span>
+        <span class="delta-badge delta-blue" id="m-revenue-d">—</span>
+      </div>
+    </div>
+
+    <!-- Card 2: How Much We Grew -->
+    <div class="col-3 metric-card card-orange">
+      <div class="metric-glow glow-orange"></div>
+      <p class="card-label">How Much We Grew</p>
+      <p class="card-value orange-text" id="m-growth">—</p>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <span class="footer-label">year over year</span>
+        <span class="delta-badge delta-orange" id="m-growth-d">—</span>
+      </div>
+    </div>
+
+    <!-- Card 3: Active Customers -->
+    <div class="col-3 metric-card card-green">
+      <div class="metric-glow glow-green"></div>
+      <p class="card-label">Active Customers</p>
+      <p class="card-value green-text" id="m-users">—</p>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <span class="footer-label">using Amazon daily</span>
+        <span class="delta-badge delta-green" id="m-users-d">—</span>
+      </div>
+    </div>
+
+    <!-- Card 4: Customers Who Left -->
+    <div class="col-3 metric-card card-red">
+      <div class="metric-glow glow-red"></div>
+      <p class="card-label">Customers Who Left</p>
+      <p class="card-value red-text" id="m-churn">—</p>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <span class="footer-label">monthly dropout rate</span>
+        <span class="delta-badge delta-red" id="m-churn-d">—</span>
+      </div>
+    </div>
+
+  </div><!-- /metric row -->
+
+  <!-- ===== ROW 2: Line + Doughnut ===== -->
+  <div class="bento-grid" style="margin-bottom: 1rem;">
+
+    <!-- Monthly Sales vs Target — Line Chart -->
+    <div class="col-8 card">
+      <div class="chart-header">
+        <div>
+          <p class="card-label">Monthly Overview</p>
+          <h2 class="chart-title">Sales Earned <span class="dim">vs</span> Sales Target</h2>
+          <p class="chart-desc">Did we hit our goal each month? (in ₹ Crore)</p>
+        </div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="legend-line" style="background:#2874F0;"></span> Actual Sales</span>
+          <span class="legend-item"><span class="legend-line" style="background:#FFD600;"></span> Target</span>
+        </div>
+      </div>
+      <div class="chart-wrap" style="height:210px;">
+        <canvas id="lineChart"></canvas>
+      </div>
+    </div>
+
+    <!-- State-wise Share — Doughnut -->
+    <div class="col-4 card">
+      <p class="card-label">Where Sales Come From</p>
+      <h2 class="chart-title">Sales by Indian State</h2>
+      <p class="chart-desc">Which state buys the most on Amazon?</p>
+      <div class="chart-wrap" style="height:195px; margin-top:.5rem;">
+        <canvas id="doughnutChart"></canvas>
+      </div>
+    </div>
+
+  </div><!-- /row2 -->
+
+  <!-- ===== ROW 3: Bar + Radar ===== -->
+  <div class="bento-grid" style="margin-bottom: 1rem;">
+
+    <!-- Quarterly performance — Bar -->
+    <div class="col-6 card">
+      <p class="card-label">3-Month Blocks</p>
+      <h2 class="chart-title">Quarterly Sales vs Spending</h2>
+      <p class="chart-desc">How much did we earn and spend each quarter?</p>
+      <div class="chart-wrap" style="height:195px; margin-top:.5rem;">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Operations Radar -->
+    <div class="col-6 card">
+      <p class="card-label">How Well We Work</p>
+      <h2 class="chart-title">Business Health Check</h2>
+      <p class="chart-desc">Score for each area of our work (out of 100)</p>
+      <div class="chart-wrap" style="height:195px; margin-top:.5rem;">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+
+  </div><!-- /row3 -->
+
+  <!-- ===== ROW 4: Horizontal Bar + Area + Scatter ===== -->
+  <div class="bento-grid">
+
+    <!-- Traffic Sources — Horizontal Bar Chart -->
+    <div class="col-4 card">
+      <p class="card-label">How Customers Find Us</p>
+      <h2 class="chart-title">Where Visitors Come From</h2>
+      <p class="chart-desc">Google, Ads, Social media or Word of mouth?</p>
+      <div class="chart-wrap" style="height:200px; margin-top:.5rem;">
+        <canvas id="hbarChart"></canvas>
+      </div>
+    </div>
+
+    <!-- New Users Over Time — Area -->
+    <div class="col-4 card">
+      <p class="card-label">New Sign-ups</p>
+      <h2 class="chart-title">How Many New Users Joined</h2>
+      <p class="chart-desc">Number of new users added each month</p>
+      <div class="chart-wrap" style="height:200px; margin-top:.5rem;">
+        <canvas id="areaChart"></canvas>
+      </div>
+    </div>
+
+    <!-- CLV vs CAC — Scatter -->
+    <div class="col-4 card">
+      <p class="card-label">Customer Value Study</p>
+      <h2 class="chart-title">What We Spend to Get a Customer vs What They Pay Us</h2>
+      <p class="chart-desc">Each dot = one customer type</p>
+      <div class="chart-wrap" style="height:200px; margin-top:.5rem;">
+        <canvas id="scatterChart"></canvas>
+      </div>
+    </div>
+
+  </div><!-- /row4 -->
+
+  <!-- Footer -->
+  <footer class="dash-footer">
+    AMAZON ANALYTICS DASHBOARD · ALL NUMBERS ARE FOR DEMO PURPOSES ONLY · INDIA BUSINESS INTELLIGENCE
+  </footer>
+
+</main>
+
+<!-- JS at bottom -->
+<script src="index1.js"></script>
+</body>
+</html>

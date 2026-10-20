@@ -1,0 +1,396 @@
+/* =====================================================
+   index1.css — Amazon Analytics Dashboard Styles
+   Amazon Brand Colors:
+     Amazon Orange   → #FF9900
+     Amazon Blue     → #146eb4
+     Dark BG         → #131921  (amazon dark navy)
+     Card Surface    → #232f3e
+   ===================================================== */
+
+/* ── Root Variables ───────────────────────────────── */
+:root {
+  --bg-dark:       #131921;       /* deep amazon navy background */
+  --card-bg:       #232f3e;       /* slightly lighter amazon card */
+  --card-border:   rgba(255,153,0,0.18);
+  --am-orange:     #FF9900;       /* Amazon primary orange */
+  --am-blue:       #146eb4;       /* Amazon blue accent */
+  --am-light-blue: #7ca8ff;       /* lighter blue for accents */
+  --am-green:      #26a541;       /* success green (reuse) */
+  --am-red:        #ff4d4d;       /* alert red (reuse) */
+  --text-main:     #e8eeff;       /* off-white for contrast */
+  --text-muted:    #a0a0a0;       /* muted gray */
+  --text-dim:      #4a5568;       /* dim gray for footer */
+  --grid-line:     rgba(255,153,0,0.08);
+}  
+
+/* light theme overrides */
+body.light-mode {
+  --bg-dark: #f5f5f5;
+  --card-bg: #ffffff;
+  --text-main: #131921;
+  --text-muted: #555;
+  --text-dim: #888;
+  --grid-line: rgba(0,0,0,0.05);
+}  
+
+
+/* ── Base Reset ───────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-dark);
+  font-family: 'Noto Sans', sans-serif;
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background: deep Amazon navy glow, subtle orange accents */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 10% 0%,   rgba(20,110,180,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 90%,   rgba(20,110,180,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%,   rgba(255,214,0,0.03)  0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+main { position: relative; z-index: 1; }
+
+/* ── Header ───────────────────────────────────────── */
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(20,110,180,0.25);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(20,110,180,0.12);
+  border: 1px solid rgba(20,110,180,0.3);
+}
+
+.site-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* Orange highlight — Amazon's brand accent */
+.highlight-orange { color: var(--am-orange); }
+
+.site-sub {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.live-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--am-green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(1.35); }
+}
+
+/* Refresh / Export / Theme Buttons — Amazon Orange */
+#refreshBtn, #exportBtn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #FF9900, #cc7a00);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 0 20px rgba(255,153,0,0.4);
+}
+
+#themeBtn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+#themeBtn:hover { color: var(--am-orange); }
+
+#refreshBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(255,153,0,0.6);
+}
+
+#refreshBtn:active { transform: translateY(0); }
+#refreshBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.refresh-icon { flex-shrink: 0; }
+.refresh-icon.spinning { animation: spin 0.7s linear infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Bento Grid ───────────────────────────────────── */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.col-3  { grid-column: span 3; }
+.col-4  { grid-column: span 4; }
+.col-6  { grid-column: span 6; }
+.col-8  { grid-column: span 8; }
+.col-12 { grid-column: span 12; }
+
+@media (max-width: 1024px) {
+  .col-3 { grid-column: span 6; }
+  .col-4 { grid-column: span 6; }
+  .col-6 { grid-column: span 12; }
+  .col-8 { grid-column: span 12; }
+}
+
+@media (max-width: 640px) {
+  .col-3, .col-4, .col-6, .col-8 { grid-column: span 12; }
+}
+
+/* ── Base Card ────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border: 1px solid rgba(20,110,180,0.15);
+  border-radius: 14px;
+  padding: 1.4rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle blue shimmer top line on cards */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(20,110,180,0.3), transparent);
+}
+
+.card:hover {
+  transform: translateY(-4px) scale(1.004);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+  border-color: rgba(20,110,180,0.4);
+}
+
+/* ── Metric Cards (Glassmorphism) ─────────────────── */
+.metric-card {
+  border-radius: 14px;
+  padding: 1.4rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.metric-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 20px 44px rgba(0,0,0,0.55);
+}
+
+/* Amazon-themed metric card color variants */
+.card-blue   { background: linear-gradient(135deg, rgba(19,25,33,0.95), rgba(20,110,180,0.1));  border: 1px solid rgba(20,110,180,0.3); }
+.card-orange { background: linear-gradient(135deg, rgba(19,25,33,0.95), rgba(255,153,0,0.08));  border: 1px solid rgba(255,153,0,0.3); }
+.card-green  { background: linear-gradient(135deg, rgba(13,30,69,0.95), rgba(38,165,65,0.08));  border: 1px solid rgba(38,165,65,0.25); }
+.card-red    { background: linear-gradient(135deg, rgba(13,30,69,0.95), rgba(255,77,77,0.08));  border: 1px solid rgba(255,77,77,0.25); }
+
+/* Glow blobs */
+.metric-glow {
+  position: absolute;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.22;
+  top: -25px; right: -25px;
+  pointer-events: none;
+}
+
+.glow-blue   { background: #2874F0; }
+.glow-orange { background: #FF9900; }
+.glow-green  { background: #26a541; }
+.glow-red    { background: #ff4d4d; }
+
+/* ── Card Typography ──────────────────────────────── */
+.card-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.card-value {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Amazon text color classes */
+.blue-text   { color: var(--am-light-blue); }
+.orange-text { color: var(--am-orange); }
+.green-text  { color: var(--am-green); }
+.red-text    { color: var(--am-red); }
+
+.card-divider {
+  height: 1px;
+  background: rgba(40,116,240,0.12);
+  margin: 0.7rem 0;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.delta-badge {
+  font-size: 0.68rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.delta-blue   { background: rgba(20,110,180,0.18); color: var(--am-light-blue); }
+.delta-orange { background: rgba(255,153,0,0.15);  color: var(--am-orange); }
+.delta-green  { background: rgba(38,165,65,0.15);  color: var(--am-green); }
+.delta-red    { background: rgba(255,77,77,0.15);   color: var(--am-red); }
+
+/* ── Chart Card Header ────────────────────────────── */
+.chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chart-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.chart-desc {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.dim { color: var(--text-muted); }
+
+/* ── Chart Legend ─────────────────────────────────── */
+.legend-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.legend-line {
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+}
+
+/* ── Chart wrapper ────────────────────────────────── */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* ── Footer ───────────────────────────────────────── */
+.dash-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 0;
+  border-top: 1px solid rgba(20,110,180,0.1);
+}
+
+/* ── Scrollbar ────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: #1a3570; border-radius: 3px; }
