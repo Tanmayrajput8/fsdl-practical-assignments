@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxe Fashion India | Fashion E-Commerce</title>
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-uppercase" href="#hero">
+        <span class="brand-logo">Luxe</span> Fashion
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+          <li class="nav-item">
+            <a class="nav-link active" href="#hero">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#shop">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="loginLink" href="login.html">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#shop">Categories</a>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-link nav-link text-dark text-decoration-none position-relative p-0" id="wishlistBtn" data-bs-toggle="modal" data-bs-target="#wishlistModal" aria-label="Wishlist">
+              <i class="bi bi-heart fs-5"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger wishlist-badge" id="wishlistBadge">0</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-link nav-link text-dark text-decoration-none position-relative p-0" id="cartBtn" data-bs-toggle="modal" data-bs-target="#cartModal">
+              <i class="bi bi-bag-heart fs-5"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cartBadge">0</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO SECTION ========== -->
+  <section id="hero" class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content container text-center text-white position-relative">
+      <h1 class="display-4 fw-bold mb-3">New Season, New Style</h1>
+      <p class="lead mb-4">Discover curated fashion for every occasion. Premium quality, timeless design.</p>
+      <a href="#shop" class="btn btn-light btn-lg px-4 py-3 rounded-0 text-uppercase fw-semibold">Shop Now</a>
+    </div>
+  </section>
+
+  <!-- ========== SHOP: SIDEBAR + PRODUCTS ========== -->
+  <section id="shop" class="py-5 shop-section">
+    <div class="container">
+      <div class="row g-4">
+        <!-- LEFT SIDEBAR: Categories + Colour + Sort -->
+        <aside class="col-12 col-lg-3 order-2 order-lg-1">
+          <div class="shop-sidebar bg-light rounded-0 border p-4">
+            <div class="input-group mb-4">
+              <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control border-start-0 rounded-0" id="searchInput" placeholder="Search products...">
+            </div>
+
+            <h6 class="text-uppercase fw-bold mb-3">Categories</h6>
+            <ul class="list-unstyled mb-4">
+              <li><a href="#" class="category-filter active text-dark text-decoration-none py-1 d-block" data-category="all">All</a></li>
+              <li><a href="#" class="category-filter text-dark text-decoration-none py-1 d-block" data-category="Men">Men</a></li>
+              <li><a href="#" class="category-filter text-dark text-decoration-none py-1 d-block" data-category="Women">Women</a></li>
+              <li><a href="#" class="category-filter text-dark text-decoration-none py-1 d-block" data-category="Accessories">Accessories</a></li>
+            </ul>
+
+            <h6 class="text-uppercase fw-bold mb-3">Colour</h6>
+            <div class="colour-filters d-flex flex-wrap gap-2 mb-4" id="colourFilters">
+              <button type="button" class="colour-filter-btn active" data-color="all">All</button>
+              <button type="button" class="colour-filter-btn" data-color="Black">Black</button>
+              <button type="button" class="colour-filter-btn" data-color="White">White</button>
+              <button type="button" class="colour-filter-btn" data-color="Blue">Blue</button>
+              <button type="button" class="colour-filter-btn" data-color="Brown">Brown</button>
+              <button type="button" class="colour-filter-btn" data-color="Beige">Beige</button>
+              <button type="button" class="colour-filter-btn" data-color="Navy">Navy</button>
+              <button type="button" class="colour-filter-btn" data-color="Grey">Grey</button>
+            </div>
+
+            <h6 class="text-uppercase fw-bold mb-3">Sort By</h6>
+            <select class="form-select form-select-sm rounded-0" id="sortSelect">
+              <option value="default">Default</option>
+              <option value="price-low">Price: Low → High</option>
+              <option value="price-high">Price: High → Low</option>
+              <option value="name-az">Name: A → Z</option>
+              <option value="name-za">Name: Z → A</option>
+            </select>
+          </div>
+        </aside>
+
+        <!-- RIGHT: Product grid -->
+        <div class="col-12 col-lg-9 order-1 order-lg-2">
+          <h2 class="section-title mb-2">Featured Products</h2>
+          <p class="text-muted mb-4">Handpicked styles for the modern wardrobe</p>
+          <div id="productsGrid" class="row g-4">
+            <!-- Products rendered dynamically by script.js -->
+          </div>
+          <div id="noProductsMessage" class="text-center py-5 d-none">
+            <p class="text-muted">No products match your search or filter.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== QUICK VIEW MODAL ========== -->
+  <div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content rounded-0 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title" id="quickViewModalLabel">Quick View</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="quickViewContent">
+          <!-- Filled by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== WISHLIST MODAL ========== -->
+  <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-0 border-0 shadow">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title" id="wishlistModalLabel"><i class="bi bi-heart me-2"></i>Wishlist</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0" id="wishlistItemsContainer">
+          <!-- Wishlist items rendered by script.js -->
+        </div>
+        <div class="modal-footer border-top" id="wishlistFooter">
+          <button type="button" class="btn btn-outline-secondary rounded-0" data-bs-dismiss="modal">Continue Shopping</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CART MODAL ========== -->
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-0 border-0 shadow">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title" id="cartModalLabel"><i class="bi bi-bag-heart me-2"></i>Your Cart</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0" id="cartItemsContainer">
+          <!-- Cart items rendered by script.js -->
+        </div>
+        <div class="modal-footer flex-column border-top">
+          <div class="w-100 d-flex justify-content-between mb-2">
+            <strong>Total:</strong>
+            <span id="cartTotal" class="fw-bold text-primary">$0.00</span>
+          </div>
+          <button type="button" class="btn btn-dark w-100 rounded-0" id="checkoutBtn" disabled>Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DELIVERY ADDRESS MODAL (Checkout) – Indian format ========== -->
+  <div class="modal fade" id="deliveryModal" tabindex="-1" aria-labelledby="deliveryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-0 border-0 shadow">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title" id="deliveryModalLabel"><i class="bi bi-truck me-2"></i>Delivery Address</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small mb-3">Enter your delivery address in India. All fields marked * are required.</p>
+          <form id="deliveryForm" novalidate>
+            <div class="mb-3">
+              <label for="deliveryName" class="form-label">Full Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control rounded-0" id="deliveryName" required placeholder="e.g. Rahul Sharma">
+              <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="mb-3">
+              <label for="deliveryPhone" class="form-label">Mobile Number <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control rounded-0" id="deliveryPhone" required placeholder="e.g. 98765 43210" maxlength="14" inputmode="numeric">
+              <div class="invalid-feedback">Please enter a valid 10-digit Indian mobile number.</div>
+            </div>
+            <div class="mb-3">
+              <label for="deliveryAddress1" class="form-label">Address Line 1 <span class="text-danger">*</span></label>
+              <input type="text" class="form-control rounded-0" id="deliveryAddress1" required placeholder="House no., Building, Street">
+              <div class="invalid-feedback">Please enter your address.</div>
+            </div>
+            <div class="mb-3">
+              <label for="deliveryAddress2" class="form-label">Address Line 2 <span class="text-muted">(optional)</span></label>
+              <input type="text" class="form-control rounded-0" id="deliveryAddress2" placeholder="Area, Colony, Landmark">
+            </div>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label for="deliveryCity" class="form-label">City <span class="text-danger">*</span></label>
+                <input type="text" class="form-control rounded-0" id="deliveryCity" required placeholder="e.g. Mumbai">
+                <div class="invalid-feedback">Please enter city.</div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="deliveryState" class="form-label">State <span class="text-danger">*</span></label>
+                <select class="form-select rounded-0" id="deliveryState" required>
+                  <option value="">Select State</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                  <option value="Ladakh">Ladakh</option>
+                  <option value="Puducherry">Puducherry</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                </select>
+                <div class="invalid-feedback">Please select state.</div>
+              </div>
+            </div>
+            <div class="mb-3 mt-3">
+              <label for="deliveryZip" class="form-label">Pincode <span class="text-danger">*</span></label>
+              <input type="text" class="form-control rounded-0" id="deliveryZip" required placeholder="6-digit pincode (e.g. 400001)" maxlength="6" inputmode="numeric" pattern="[0-9]{6}">
+              <div class="invalid-feedback">Please enter a valid 6-digit Indian pincode.</div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-outline-secondary rounded-0" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-dark rounded-0" id="placeOrderBtn">Place Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== ORDER SUCCESS MODAL ========== -->
+  <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content rounded-0 border-0 shadow text-center py-4">
+        <div class="modal-body">
+          <i class="bi bi-check-circle-fill text-success display-4"></i>
+          <h5 class="mt-3">Order Placed!</h5>
+          <p class="text-muted small mb-0">Thank you for shopping with Luxe Fashion. Your order will be delivered soon.</p>
+          <button type="button" class="btn btn-dark rounded-0 mt-3" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer-main bg-dark text-white mt-5">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+          <h6 class="text-uppercase fw-bold mb-3">Luxe Fashion India</h6>
+          <p class="small text-white-50 mb-2">Premium fashion for every occasion. Quality & style you can trust.</p>
+          <p class="mb-0 small">
+            <i class="bi bi-geo-alt-fill me-2 text-warning"></i>
+            Shop No. 12, Sector 28, Nigdi, Pune – 411044<br>
+            <span class="ms-4">Maharashtra, India</span>
+          </p>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <h6 class="text-uppercase fw-bold mb-3">Contact</h6>
+          <p class="small mb-2">
+            <i class="bi bi-telephone-fill me-2 text-warning"></i>
+            <a href="tel:+919876543210" class="text-white text-decoration-none">+91 98765 43210</a>
+          </p>
+          <p class="small mb-0">
+            <i class="bi bi-envelope-fill me-2 text-warning"></i>
+            <a href="mailto:hello@luxefashion.in" class="text-white text-decoration-none">hello@luxefashion.in</a>
+          </p>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <h6 class="text-uppercase fw-bold mb-3">Follow Us</h6>
+          <div class="footer-social d-flex gap-3">
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="text-white fs-5" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="text-white fs-5" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://twitter.com/" target="_blank" rel="noopener" class="text-white fs-5" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://wa.me/919876543210" target="_blank" rel="noopener" class="text-white fs-5" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+            <a href="https://www.youtube.com/" target="_blank" rel="noopener" class="text-white fs-5" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <hr class="my-4 border-secondary">
+      <div class="text-center small text-white-50">
+        <p class="mb-0">&copy; 2025 Luxe Fashion India. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
