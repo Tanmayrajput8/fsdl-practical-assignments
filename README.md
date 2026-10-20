@@ -23,17 +23,6 @@ using GitHub Pages.
 
 ---
 
-## List of Uploaded Assignments
-
-| Assignment No. | Assignment |
-|---|---|
-| Assignment 01 | YOUR ASSIGNMENT TITLE |
-| Assignment 02 | YOUR ASSIGNMENT TITLE |
-| Assignment 03 | YOUR ASSIGNMENT TITLE |
-| Assignment 04 | YOUR ASSIGNMENT TITLE |
-
----
-
 ## Repository Structure
 
 ```text
